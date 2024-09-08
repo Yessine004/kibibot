@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kibi</title>
+    <style>
+        /* General Reset and Styling */
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #1d1f22;
+            color: #e4e6eb;
+            padding-bottom: 60px;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        h1, h2, h3, p {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background-color: #2f3136;
+            color: #e4e6eb;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid #4f545c;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
+        }
+
+        .logo {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links li {
+            margin: 0 20px;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            font-size: 1.1em;
+            padding: 5px 0;
+            position: relative;
+            transition: color 0.3s ease, border-bottom 0.3s ease;
+        }
+
+        .nav-links a::before {
+            content: '';
+            display: block;
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: #7289da;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::before {
+            width: 100%;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .menu-toggle .bar {
+            background: #ffffff;
+            height: 4px;
+            width: 30px;
+            margin: 4px 0;
+            transition: 0.3s;
+        }
+
+        /* Mobile Menu Styling */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background-color: #2f3136;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                padding: 20px 0;
+                box-sizing: border-box;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .nav-links a {
+                padding: 15px;
+                text-align: center;
+                border-bottom: 1px solid #4f545c;
+            }
+        }
+
+        /* Section Styling */
+        .section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 60px;
+            min-height: 100vh;
+            background: #1d1f22;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .text-container {
+            flex: 1;
+            margin-left: 40px;
+            opacity: 0;
+            transform: translateX(50px);
+            animation: fadeInRight 1s forwards;
+        }
+
+        .photo-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transform: translateX(-50px);
+            animation: fadeInLeft 1s forwards;
+        }
+
+        .photo-container img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            animation: scaleIn 1s forwards;
+        }
+
+        /* Features Section */
+        .features-section .text-container {
+            margin-left: 60px;
+        }
+
+        .features-section h3 {
+            font-size: 1.6em;
+            color: #99aab5;
+            animation-delay: 0.5s;
+        }
+
+        .features-section h1 {
+            font-size: 2.8em;
+            color: #ffffff;
+            margin: 10px 0;
+            animation-delay: 0.7s;
+        }
+
+        .features-section p {
+            font-size: 1.1em;
+            color: #99aab5;
+            margin: 0 0 20px;
+            animation-delay: 0.9s;
+        }
+
+        /* Button Styling */
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 1.1em;
+            color: #ffffff;
+            background-color: #7289da;
+            border: none;
+            border-radius: 8px;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #5a6dbe;
+            transform: scale(1.05);
+        }
+
+        /* Call to Action Section */
+        .cta-section {
+            background-color: #1d1f22;
+            padding: 40px;
+            text-align: center;
+            color: #e4e6eb;
+            border-top: 2px solid #4f545c;
+        }
+
+        .cta-section h2 {
+            font-size: 2.8em;
+            margin-bottom: 20px;
+            color: #ffffff;
+            animation: glowingText 2s infinite alternate, moveUp 1.5s infinite alternate;
+        }
+
+        .cta-section .btn {
+            background-color: transparent;
+            color: #ff4757;
+            border: 2px solid #ff4757;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            margin-top: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 8px;
+            animation: pulseButton 1.5s infinite alternate;
+        }
+
+        .cta-section .btn:hover {
+            background-color: #ff4757;
+            color: #ffffff;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Footer Styling */
+        footer {
+            background-color: #2f3136;
+            color: #e4e6eb;
+            padding: 20px;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            bottom: -60px; /* Hide initially */
+            border-top: 2px solid #4f545c;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
+            transition: bottom 0.6s ease-in-out;
+        }
+
+        /* Keyframes */
+        @keyframes glowingText {
+            0% {
+                text-shadow: 0 0 8px #ff4757, 0 0 16px #ff4757;
+            }
+            100% {
+                text-shadow: 0 0 12px #ff4757, 0 0 24px #ff4757;
+            }
+        }
+
+        @keyframes moveUp {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulseButton {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="#home" class="logo">Kibi.</a>
+        <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#status">Status</a></li>
+            <li><a href="#support">Support</a></li>
+        </ul>
+        <div class="menu-toggle" id="menuToggle">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+    </nav>
+
+    <section id="home" class="section first-section">
+        <div class="text-container">
+            <h1>Transforming Your Server Experience</h1>
+            <p>Discover Kibi, the versatile Discord Bot trusted by countless communities. With over 60 commands, Kibi enhances your server like never before.</p>
+            <a href="https://discord.com/api/oauth2/authorize?client_id=948347324286005298&permissions=268748880&scope=bot%20applications.commands" class="btn" target="_blank">Invite Kibi</a>
+            <a href="http://discord.gg/XgS2KUpMwK" class="btn" target="_blank">Get Support</a>
+        </div>
+
+        <div class="photo-container">
+            <img src="https://assets.polsu.xyz/overlay/requeue.png" alt="Kibi Bot Overview">
+        </div>
+    </section>
+
+    <section id="features" class="section features-section">
+        <div class="photo-container">
+            <img src="https://assets.polsu.xyz/website/stats.png" alt="Kibi Bot Features">
+        </div>
+        <div class="text-container">
+            <h3>Exclusive Features</h3>
+            <h1>Comprehensive Stats Viewing</h1>
+            <p>Experience your stats in a new light with Kibi’s intuitive commands. Track recent games and favorite friends for easy access.</p>
+            <a href="https://discord.com/api/oauth2/authorize?client_id=948347324286005298&permissions=268748880&scope=bot%20applications.commands" class="btn" target="_blank">View My Stats</a>
+        </div>
+    </section>
+
+    <section id="status" class="section status-section">
+        <div class="text-container">
+            <h1>Service Status</h1>
+            <p>Stay informed about Kibi’s operational status with real-time updates. Our goal is to provide seamless service without interruptions.</p>
+        </div>
+        <div class="photo-container">
+            <img src="https://assets.polsu.xyz/overlay/requeue.png" alt="Service Status">
+        </div>
+    </section>
+
+    <section id="support" class="section support-section">
+        <div class="text-container">
+            <h1>Need Help?</h1>
+            <p>If you encounter any issues or need assistance, our support team is here to help. Join our community and get the support you need.</p>
+        </div>
+        <div class="photo-container">
+            <img src="https://assets.polsu.xyz/overlay/requeue.png" alt="Support">
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2>Elevate Your Guild's Experience</h2>
+        <a href="https://discord.com/api/oauth2/authorize?client_id=948347324286005298&permissions=268748880&scope=bot%20applications.commands" class="btn" target="_blank">Invite Bot</a>
+    </section>
+
+    <footer id="footer">
+        <p>&copy; 2024 kibibot Development</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.getElementById('menuToggle');
+            const navLinks = document.querySelector('.nav-links');
+            const footer = document.getElementById('footer');
+
+            menuToggle.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+                menuToggle.classList.toggle('active');
+            });
+
+            const scrollToSection = (e) => {
+                e.preventDefault();
+                const targetId = e.currentTarget.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            };
+
+            document.querySelectorAll('.nav-links a, .logo').forEach(anchor => {
+                anchor.addEventListener('click', scrollToSection);
+            });
+
+            window.addEventListener('scroll', function() {
+                const supportSection = document.getElementById('support');
+                const footerPosition = window.innerHeight + window.scrollY;
+                const supportPosition = supportSection.offsetTop + supportSection.offsetHeight;
+
+                if (footerPosition > supportPosition) {
+                    footer.style.bottom = '0'; // Show footer
+                } else {
+                    footer.style.bottom = '-60px'; // Hide footer
+                }
+            });
+        });
+    </script>
+</body>
+</html>
